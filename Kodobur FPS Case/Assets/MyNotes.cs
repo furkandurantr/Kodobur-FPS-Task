@@ -36,9 +36,10 @@ Enemy
 + Patrol Points
 - HP/Damage
 + LOS/FOV
-- Idle/Walk/Run/Attack States & Animations (?)
++ Idle/Walk/Run/Attack States & Animations (?)
 - 2+ Types
 - Spawn Cooldown
 ? Does enemy need a spesific number of patrol points? Do map has static points for assigning Enemies? Navmesh for ai?
+- Using coroutine for states causes FPS bugs, fix
 
 */

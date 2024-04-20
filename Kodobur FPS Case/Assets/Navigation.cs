@@ -32,14 +32,14 @@ public class Navigation : MonoBehaviour
     private IEnumerator idleCoroutine;
     Navigation.EnemyState myState;
     bool attackable = true;
+
+    public Animator myAnim;
     // Start is called before the first frame update
     void Start()
     {
         myState = EnemyState.patrol;
         agent = GetComponent<NavMeshAgent>();
-        //IdleWait();
-        //Will not randomly generate points
-        //AddPoint(4);
+        //myAnim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -49,19 +49,28 @@ public class Navigation : MonoBehaviour
         switch (myState)
         {
             case EnemyState.idle:
+            myAnim.SetBool("IsMoving", false);
+            myAnim.SetBool("IsRunning", false);
+            myAnim.SetBool("IsAttacking", false);
+            //myAnim.SetBool("IsAttacking", false);
                 break;
             case EnemyState.patrol:
+            myAnim.SetBool("IsMoving", true);
+            myAnim.SetBool("IsRunning", false);
             Patrol();
                 break;
             case EnemyState.run:
+            myAnim.SetBool("IsRunning", true);
+            myAnim.SetBool("IsMoving", false);
             Run();
                 break;
             case EnemyState.attack:
-
                 break;
             default:
             break;
         }
+
+        //Debug.Log(myState);
     }
 
     void CheckForSight()
@@ -85,7 +94,7 @@ public class Navigation : MonoBehaviour
             {
                 myState = EnemyState.run;
             }
-            else if (myState == EnemyState.run)
+            else if (myState == EnemyState.run || myState == EnemyState.attack)
             {
                 idleCoroutine = IdleWait();
                 StartCoroutine(idleCoroutine);
@@ -103,6 +112,7 @@ public class Navigation : MonoBehaviour
         yield return new WaitForSeconds(idleTime);
         if (myState == EnemyState.idle)
         {
+            myAnim.SetBool("IsMoving", false);
             myState = EnemyState.patrol;
         }
     }
@@ -138,17 +148,18 @@ public class Navigation : MonoBehaviour
     {
         if (attackable == true)
         {
-            attackable = false;
-            idleCoroutine = Attacking();
-            StartCoroutine(idleCoroutine);
+            //attackable = false;
+            //idleCoroutine = Attacking();
+            //StartCoroutine(idleCoroutine);
         }
+        AttackAnim();
     }
 
     IEnumerator Attacking()
     {
         yield return new WaitForSeconds(attackTime);
         float distance = Vector3.Distance (agent.transform.position, player.position);
-        if (distance <= attackRange * 2)
+        if (distance <= attackRange * 2 && myAnim.GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
         {
             var target = player.gameObject.GetComponent<PlayerHP>();
             target.TakeDamage(damage);
@@ -157,6 +168,21 @@ public class Navigation : MonoBehaviour
         myState = EnemyState.run;
     }
 
+    void AttackAnim()
+    {
+        float distance = Vector3.Distance(agent.transform.position, player.position);
+        if (myAnim.GetCurrentAnimatorStateInfo(0).normalizedTime > 1.0f && !myAnim.IsInTransition(0))
+        {
+            if (distance <= attackRange * 2)
+            {
+                var target = player.gameObject.GetComponent<PlayerHP>();
+                target.TakeDamage(damage);
+                Debug.Log("Dealt Damage");
+            }
+            attackable = false;
+            myState = EnemyState.idle;
+        }
+    }
 
     void Run()
     {
@@ -166,7 +192,13 @@ public class Navigation : MonoBehaviour
         {
             Attack();
             agent.destination = agent.transform.position;
+            myAnim.SetBool("IsAttacking", true);
+            attackable = true;
             myState = EnemyState.attack;
+        }
+        else
+        {
+            myAnim.SetBool("IsAttacking", false);
         }
     }
 
@@ -187,5 +219,10 @@ public class Navigation : MonoBehaviour
         //    curPoint.transform.position = pos;
         //    patrolPoints[i] = curPoint.transform;
         //}
+    }
+
+    public void Debugla()
+    {
+        Debug.Log("Animation");
     }
 }

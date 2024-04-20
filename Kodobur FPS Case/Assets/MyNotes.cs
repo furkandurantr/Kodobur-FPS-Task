@@ -33,11 +33,12 @@ Basics
 - Exp/Level
 
 Enemy
-- Patrol Points
++ Patrol Points
 - HP/Damage
-- LOS
-- Idle/Walk/Run/Attack States & Animations
++ LOS/FOV
+- Idle/Walk/Run/Attack States & Animations (?)
 - 2+ Types
 - Spawn Cooldown
+? Does enemy need a spesific number of patrol points? Do map has static points for assigning Enemies? Navmesh for ai?
 
 */

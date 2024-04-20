@@ -14,6 +14,7 @@ public class Navigation : MonoBehaviour
 
     public float idleTime = 5f;
     public float FOV = 60f;
+    public float LOS = 100f;
     int curPoint = 0;
 
     public enum EnemyState
@@ -47,6 +48,9 @@ public class Navigation : MonoBehaviour
             case EnemyState.patrol:
             Patrol();
                 break;
+            case EnemyState.run:
+            Run();
+                break;
             default:
             break;
         }
@@ -60,28 +64,49 @@ public class Navigation : MonoBehaviour
         
         Vector3 dir = (player.transform.position - myPos).normalized;
         //Debug.DrawLine(myPos, myPos + dir * 10, Color.red);
-        hits = Physics.RaycastAll(transform.position, dir, Mathf.Infinity);
+        hits = Physics.RaycastAll(transform.position, dir, LOS);
 
         System.Array.Sort(hits, (a, b) => (a.distance.CompareTo(b.distance)));
 
         float angle = Vector3.Angle(dir, transform.forward);
 
         angle = MathF.Abs(angle);
-
-        if (hits[0].transform.gameObject == player.gameObject && angle <= FOV)
+        if (hits.Length > 0)
         {
-                Debug.DrawRay(transform.position, dir * 20, Color.red);
-                Debug.Log(hits[0].transform.name);
+            if (hits[0].transform.gameObject == player.gameObject && angle <= FOV)
+            {
+                myState = EnemyState.run;
+            }
+            else if (myState == EnemyState.run)
+            {
+                idleCoroutine = IdleWait();
+                StartCoroutine(idleCoroutine);
+            }
         }
     }
 
     IEnumerator IdleWait()
     {
+        if (myState == EnemyState.run)
+        {
+            yield break;
+        }
         myState = EnemyState.idle;
         yield return new WaitForSeconds(idleTime);
         if (myState == EnemyState.idle)
         {
-            myState = EnemyState.patrol;  
+            myState = EnemyState.patrol;
+        }
+    }
+    IEnumerator DamagedCooldown(float damagedTimer)
+    {
+        myState = EnemyState.run;
+        yield return new WaitForSeconds(damagedTimer);
+        if (myState == EnemyState.run)
+        {
+            myState = EnemyState.idle;
+            idleCoroutine = IdleWait();
+            StartCoroutine(idleCoroutine);
         }
     }
 
@@ -103,7 +128,14 @@ public class Navigation : MonoBehaviour
 
     void Run()
     {
+        agent.destination = player.position;
+    }
 
+    public void Damaged()
+    {
+
+        idleCoroutine = DamagedCooldown(5f);
+        StartCoroutine(idleCoroutine);
     }
 
     void AddPoint(int number)

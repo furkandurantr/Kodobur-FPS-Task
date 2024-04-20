@@ -15,7 +15,6 @@ public class PlayerMovement : MonoBehaviour
     public float bufferDistance = 4f;
     public LayerMask groundMask;
     bool isGrounded;
-    bool isJumpBuffer;
     public float jumpHeight = 3f;
 
     bool jumpBuffer = false;
@@ -30,11 +29,11 @@ public class PlayerMovement : MonoBehaviour
     {
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
-
+        RaycastHit isJumpBuffer;
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        isJumpBuffer = Physics.CheckSphere(groundCheck.position, bufferDistance, groundMask);
+        Physics.SphereCast(groundCheck.position - (Vector3.down * bufferDistance)/2, groundDistance, Vector3.down * bufferDistance, out isJumpBuffer, groundMask);
 
-        if (Input.GetButtonDown("Jump") && isJumpBuffer && velocity.y < 0) 
+        if (Input.GetButton("Jump") && isJumpBuffer.transform != null && velocity.y < 0) 
         {
             jumpBuffer = true;
         }

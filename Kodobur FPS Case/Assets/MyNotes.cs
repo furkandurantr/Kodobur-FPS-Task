@@ -15,7 +15,6 @@ Movement Fixes
 + Jump Buffering
 + Diagonal Movement
 
-
 Gun
 + Gun Obj
 + Damage
@@ -23,14 +22,22 @@ Gun
 + Piercing
 
 Gun & Player
-- Shown at screen
-- Raytracing 
-- Fix view point and gun point
++ Shown at screen
++ Raytracing 
++ Fix view
 
 Basics
 - HP/MaxHP
 - Ammo
 - Kill Score
 - Exp/Level
+
+Enemy
+- Patrol Points
+- HP/Damage
+- LOS
+- Idle/Walk/Run/Attack States & Animations
+- 2+ Types
+- Spawn Cooldown
 
 */

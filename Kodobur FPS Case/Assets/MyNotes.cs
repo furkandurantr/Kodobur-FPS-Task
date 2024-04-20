@@ -8,18 +8,19 @@ Player
 + Character Movement & Control
 + Sprint w Lshift
 + Jump w Space
-- Jump will be limited w a max height (or with a value i guess?)
++ Jump will be limited w a value 
 
 Movement Fixes
 - Coyote Time
 + Jump Buffering
++ Diagonal Movement
 
 
 Gun
-- Gun Obj
-- Damage
++ Gun Obj
++ Damage
 - Ammo/MaxAmmo
-- Piercing
++ Piercing
 
 Gun & Player
 - Shown at screen

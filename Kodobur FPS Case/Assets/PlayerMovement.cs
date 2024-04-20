@@ -34,7 +34,7 @@ public class PlayerMovement : MonoBehaviour
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
         isJumpBuffer = Physics.CheckSphere(groundCheck.position, bufferDistance, groundMask);
 
-        if (Input.GetButtonDown("Jump") && isJumpBuffer) 
+        if (Input.GetButtonDown("Jump") && isJumpBuffer && velocity.y < 0) 
         {
             jumpBuffer = true;
         }
@@ -51,7 +51,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
 
-        Vector3 move = transform.right * x + transform.forward * z;
+        Vector3 move = Vector3.ClampMagnitude(transform.right * x + transform.forward * z, 1f);
 
         //Sprinting to int
         int sprinting = Input.GetButton("Sprint") ? 1 : 0;

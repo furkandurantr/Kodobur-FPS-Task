@@ -13,6 +13,9 @@ public class Navigation : MonoBehaviour
     public NavMeshAgent agent;
 
     public float idleTime = 5f;
+    public float attackTime = 1f;
+    public float attackRange = 5f;
+    public float damage = 5f;
     public float FOV = 60f;
     public float LOS = 100f;
     int curPoint = 0;
@@ -23,10 +26,12 @@ public class Navigation : MonoBehaviour
         patrol,
         run,
         attack,
+        attackRegain,
     }
 
     private IEnumerator idleCoroutine;
     Navigation.EnemyState myState;
+    bool attackable = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -50,6 +55,9 @@ public class Navigation : MonoBehaviour
                 break;
             case EnemyState.run:
             Run();
+                break;
+            case EnemyState.attack:
+
                 break;
             default:
             break;
@@ -126,14 +134,44 @@ public class Navigation : MonoBehaviour
         }
     }
 
+    void Attack()
+    {
+        if (attackable == true)
+        {
+            attackable = false;
+            idleCoroutine = Attacking();
+            StartCoroutine(idleCoroutine);
+        }
+    }
+
+    IEnumerator Attacking()
+    {
+        yield return new WaitForSeconds(attackTime);
+        float distance = Vector3.Distance (agent.transform.position, player.position);
+        if (distance <= attackRange * 2)
+        {
+            var target = player.gameObject.GetComponent<PlayerHP>();
+            target.TakeDamage(damage);
+        }
+        attackable = true;
+        myState = EnemyState.run;
+    }
+
+
     void Run()
     {
         agent.destination = player.position;
+        float distance = Vector3.Distance (agent.transform.position, player.position);
+        if (distance <= attackRange)
+        {
+            Attack();
+            agent.destination = agent.transform.position;
+            myState = EnemyState.attack;
+        }
     }
 
     public void Damaged()
     {
-
         idleCoroutine = DamagedCooldown(5f);
         StartCoroutine(idleCoroutine);
     }

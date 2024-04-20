@@ -27,7 +27,7 @@ Gun & Player
 + Fix view
 
 Basics
-- HP/MaxHP
++ HP/MaxHP
 - Ammo
 - Kill Score
 - Exp/Level

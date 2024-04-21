@@ -18,7 +18,7 @@ Movement Fixes
 Gun
 + Gun Obj
 + Damage
-- Ammo/MaxAmmo
++ Ammo/MaxAmmo
 + Piercing
 
 Gun & Player
@@ -28,18 +28,18 @@ Gun & Player
 
 Basics
 + HP/MaxHP
-- Ammo
++ Ammo
 - Kill Score
-- Exp/Level
++ Exp/Level
 
 Enemy
 + Patrol Points
-- HP/Damage
++ HP/Damage
 + LOS/FOV
 + Idle/Walk/Run/Attack States & Animations (?)
 - 2+ Types
-- Spawn Cooldown
++ Spawn Cooldown
 ? Does enemy need a spesific number of patrol points? Do map has static points for assigning Enemies? Navmesh for ai?
-- Using coroutine for states causes FPS bugs, fix
++ Using coroutine for states causes FPS bugs, fix
 
 */

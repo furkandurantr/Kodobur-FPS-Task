@@ -11,6 +11,8 @@ public class Target : MonoBehaviour
     public Transform camPos;
     public Slider slider;
     public GameObject spawner;
+
+    public float expPoint = 15f;
     // Start is called before the first frame update
     void Start()
     {
@@ -41,6 +43,10 @@ public class Target : MonoBehaviour
     void Die()
     {
         spawner.GetComponent<SpawnController>().EnemyDead();
+        var playerLevel = camPos.GetComponentInParent<PlayerLevel>();
+        //var playerLevel = camPos.gameObject.GetComponent<PlayerLevel>();
+        playerLevel.GainExp(expPoint);
+        playerLevel.GainScore(1);
         Destroy(gameObject);
     }
 

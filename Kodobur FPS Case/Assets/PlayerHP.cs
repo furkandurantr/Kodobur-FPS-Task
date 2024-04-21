@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 public class PlayerHP : MonoBehaviour
 {
     public float HP = 100;
-    public float MaxHP = 100;
+    public float maxHP = 100;
     public Slider slider;
     // Start is called before the first frame update
     void Start()
@@ -28,6 +29,12 @@ public class PlayerHP : MonoBehaviour
 
     void HPRatio()
     {
-        slider.value = HP / MaxHP;
+        slider.value = HP / maxHP;
+    }
+
+    public void Heal(float heal)
+    {
+        HP += MathF.Min(heal, maxHP - HP);
+        HPRatio();
     }
 }

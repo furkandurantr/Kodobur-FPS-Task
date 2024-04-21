@@ -55,7 +55,7 @@ public class Navigation : MonoBehaviour
         {
             case EnemyState.idle:
             myAnim.SetBool("IsMoving", false);
-            myAnim.SetBool("IsRunning", false);
+            myAnim.SetBool("IsRunning", false);    
             if (IsInSight())
             {
                 myState = EnemyState.run;
@@ -64,6 +64,7 @@ public class Navigation : MonoBehaviour
             case EnemyState.patrol:
             myAnim.SetBool("IsMoving", true);
             myAnim.SetBool("IsRunning", false);
+            myAnim.SetBool("IsAttacking", false);
             if (IsInSight())
             {
                 myState = EnemyState.run;

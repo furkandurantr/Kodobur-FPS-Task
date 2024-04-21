@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -10,10 +11,12 @@ public class SpawnController : MonoBehaviour
     public GameObject enemy;
     public Transform player;
     public Transform myCamera;
+    public float enemySpawnTime = 10f;
+    float spawnerTime = 0f;
     public Transform[] spawnPoints;
     public Transform[] patrolPoints;
+    int currentEnemyNumber = 0;
 
-    public int[] points = {3, 4, 5, 6, 7, 8, 9};
     // Start is called before the first frame update
     void Start()
     {
@@ -26,7 +29,24 @@ public class SpawnController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        CheckForSpawns();
+    }
+
+    void CheckForSpawns()
+    {
+        if (currentEnemyNumber < maxEnemy)
+        {
+            spawnerTime += Time.deltaTime;
+            if (spawnerTime >= enemySpawnTime)
+            {
+                SpawnEnemy();
+            }
+        }
+    }
+
+    public void EnemyDead()
+    {
+        currentEnemyNumber -= 1;
     }
 
     void SpawnEnemy()
@@ -40,6 +60,7 @@ public class SpawnController : MonoBehaviour
 
         curNav.player = player;
         curTarget.camPos = myCamera;
+        curTarget.spawner = gameObject;
 
         int[] patrolIndices = new int[maxPatrolNumber];
 
@@ -57,5 +78,7 @@ public class SpawnController : MonoBehaviour
             shuffledPoints[randomIndex] = temp;
             
         }
+        currentEnemyNumber += 1;
+        spawnerTime = 0;
     }
 }

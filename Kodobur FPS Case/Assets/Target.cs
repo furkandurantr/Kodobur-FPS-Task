@@ -10,6 +10,7 @@ public class Target : MonoBehaviour
     public GameObject myObj;
     public Transform camPos;
     public Slider slider;
+    public GameObject spawner;
     // Start is called before the first frame update
     void Start()
     {
@@ -39,6 +40,7 @@ public class Target : MonoBehaviour
     }
     void Die()
     {
+        spawner.GetComponent<SpawnController>().EnemyDead();
         Destroy(gameObject);
     }
 

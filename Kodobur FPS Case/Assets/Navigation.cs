@@ -37,6 +37,8 @@ public class Navigation : MonoBehaviour
     Navigation.EnemyState myState;
     bool attackable = true;
 
+    public LayerMask layerMask;
+
     public Animator myAnim;
     // Start is called before the first frame update
     void Start()
@@ -137,7 +139,7 @@ public class Navigation : MonoBehaviour
         
         Vector3 dir = (player.transform.position - myPos).normalized;
         //This raycast can be changed with spherecast/capsulecast
-        hits = Physics.RaycastAll(transform.position, dir, LOS);
+        hits = Physics.RaycastAll(transform.position, dir, LOS, layerMask);
 
         System.Array.Sort(hits, (a, b) => (a.distance.CompareTo(b.distance)));
         //Fake FOV

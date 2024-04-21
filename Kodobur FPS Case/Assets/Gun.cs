@@ -28,7 +28,10 @@ public class Gun : MonoBehaviour
             Shoot();
         }
     }
-
+    public void Reload()
+    {
+        ammoText.text = curAmmo + "/" + maxAmmo;
+    }
     void Shoot()
     {
         curAmmo -= 1;

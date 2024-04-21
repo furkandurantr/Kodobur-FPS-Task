@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Controller : MonoBehaviour
 {
+    public GameObject inGameGUI;
+    public GameObject talentGUI;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,11 +26,15 @@ public class Controller : MonoBehaviour
         if (Time.timeScale == 0)
         {
             Time.timeScale = 1;
+            inGameGUI.SetActive(true);
+            talentGUI.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
          }
         else
         {
             Time.timeScale = 0;
+            inGameGUI.SetActive(false);
+            talentGUI.SetActive(true);
             Cursor.lockState = CursorLockMode.Confined;
         }   
     }

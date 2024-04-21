@@ -13,6 +13,7 @@ public class Navigation : MonoBehaviour
     public NavMeshAgent agent;
 
     public float idleTime = 5f;
+    public float aggroTime = 5f;
     public float attackTime = 1f;
     public float attackRange = 5f;
     public float damage = 5f;
@@ -20,9 +21,13 @@ public class Navigation : MonoBehaviour
     public float LOS = 100f;
     int curPoint = 0;
 
+    float mustRun = 0f;
+    float mustWait = 0f;
+
     public enum EnemyState
     {
         idle,
+        idleEnd,
         patrol,
         run,
         attack,
@@ -45,18 +50,23 @@ public class Navigation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CheckForSight();
         switch (myState)
         {
             case EnemyState.idle:
             myAnim.SetBool("IsMoving", false);
             myAnim.SetBool("IsRunning", false);
-            myAnim.SetBool("IsAttacking", false);
-            //myAnim.SetBool("IsAttacking", false);
+            if (IsInSight())
+            {
+                myState = EnemyState.run;
+            }
                 break;
             case EnemyState.patrol:
             myAnim.SetBool("IsMoving", true);
             myAnim.SetBool("IsRunning", false);
+            if (IsInSight())
+            {
+                myState = EnemyState.run;
+            }
             Patrol();
                 break;
             case EnemyState.run:
@@ -65,43 +75,32 @@ public class Navigation : MonoBehaviour
             Run();
                 break;
             case EnemyState.attack:
+            Attack();
                 break;
             default:
             break;
         }
-
-        //Debug.Log(myState);
+        MustRun();
+        MustWait();
     }
 
-    void CheckForSight()
+    void MustWait()
     {
-        RaycastHit[] hits;
-        Vector3 myPos = transform.position;
-        Vector3 myDir = transform.forward;
-        
-        Vector3 dir = (player.transform.position - myPos).normalized;
-        //Debug.DrawLine(myPos, myPos + dir * 10, Color.red);
-        hits = Physics.RaycastAll(transform.position, dir, LOS);
-
-        System.Array.Sort(hits, (a, b) => (a.distance.CompareTo(b.distance)));
-
-        float angle = Vector3.Angle(dir, transform.forward);
-
-        angle = MathF.Abs(angle);
-        if (hits.Length > 0)
+        if (mustWait > 0)
         {
-            if (hits[0].transform.gameObject == player.gameObject && angle <= FOV)
+            mustWait -= Time.deltaTime;
+            agent.destination = transform.position;
+            myAnim.SetBool("IsRunning", false);
+            if (IsInSight())
             {
-                myState = EnemyState.run;
-            }
-            else if (myState == EnemyState.run || myState == EnemyState.attack)
-            {
-                idleCoroutine = IdleWait();
-                StartCoroutine(idleCoroutine);
+                mustWait = 0f;
             }
         }
+        else if (myState == EnemyState.idle)
+        {
+            myState = EnemyState.patrol;
+        }
     }
-
     IEnumerator IdleWait()
     {
         if (myState == EnemyState.run)
@@ -116,26 +115,52 @@ public class Navigation : MonoBehaviour
             myState = EnemyState.patrol;
         }
     }
-    IEnumerator DamagedCooldown(float damagedTimer)
+    void MustRun()
     {
-        myState = EnemyState.run;
-        yield return new WaitForSeconds(damagedTimer);
-        if (myState == EnemyState.run)
+        if (mustRun > 0)
         {
-            myState = EnemyState.idle;
-            idleCoroutine = IdleWait();
-            StartCoroutine(idleCoroutine);
+            mustWait = 0f;
+            mustRun -= Time.deltaTime;
+            myState = EnemyState.run;
+            if (myState == EnemyState.attack)
+            {
+                mustRun = 0f;
+            }
         }
     }
 
+    bool IsInSight()
+    {
+        bool seen = false;
+        RaycastHit[] hits;
+        Vector3 myPos = transform.position;
+        Vector3 myDir = transform.forward;
+        
+        Vector3 dir = (player.transform.position - myPos).normalized;
+        hits = Physics.RaycastAll(transform.position, dir, LOS);
+
+        System.Array.Sort(hits, (a, b) => (a.distance.CompareTo(b.distance)));
+
+        float angle = Vector3.Angle(dir, transform.forward);
+
+        angle = MathF.Abs(angle);
+        if (hits.Length > 0)
+        {
+            if (hits[0].transform.gameObject == player.gameObject && angle <= FOV)
+            {
+                seen = true;
+            }
+        }
+        return seen;
+    }
     void Patrol()
     {        
         agent.destination = patrolPoints[curPoint].position;
         float distance = Vector3.Distance (agent.transform.position, patrolPoints[curPoint].position);
         if (distance <= 1f)
         {    
-            idleCoroutine = IdleWait();
-            StartCoroutine(idleCoroutine);
+            mustWait = idleTime;
+            myState = EnemyState.idle;
             curPoint += 1;
             if (curPoint >= patrolPoints.Length)
             {
@@ -146,41 +171,27 @@ public class Navigation : MonoBehaviour
 
     void Attack()
     {
-        if (attackable == true)
-        {
-            //attackable = false;
-            //idleCoroutine = Attacking();
-            //StartCoroutine(idleCoroutine);
-        }
         AttackAnim();
-    }
-
-    IEnumerator Attacking()
-    {
-        yield return new WaitForSeconds(attackTime);
-        float distance = Vector3.Distance (agent.transform.position, player.position);
-        if (distance <= attackRange * 2 && myAnim.GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
-        {
-            var target = player.gameObject.GetComponent<PlayerHP>();
-            target.TakeDamage(damage);
-        }
-        attackable = true;
-        myState = EnemyState.run;
     }
 
     void AttackAnim()
     {
         float distance = Vector3.Distance(agent.transform.position, player.position);
-        if (myAnim.GetCurrentAnimatorStateInfo(0).normalizedTime > 1.0f && !myAnim.IsInTransition(0))
+        if (myAnim.GetCurrentAnimatorStateInfo(0).normalizedTime > 1.0f && !myAnim.IsInTransition(0) && attackable == true)
         {
+            attackable = false;
             if (distance <= attackRange * 2)
             {
                 var target = player.gameObject.GetComponent<PlayerHP>();
                 target.TakeDamage(damage);
                 Debug.Log("Dealt Damage");
+                myAnim.SetBool("IsAttacking", false);
+                myState = EnemyState.run;
             }
-            attackable = false;
-            myState = EnemyState.idle;
+            else
+            {
+                myState = EnemyState.idle;
+            }
         }
     }
 
@@ -190,35 +201,30 @@ public class Navigation : MonoBehaviour
         float distance = Vector3.Distance (agent.transform.position, player.position);
         if (distance <= attackRange)
         {
-            Attack();
             agent.destination = agent.transform.position;
             myAnim.SetBool("IsAttacking", true);
-            attackable = true;
             myState = EnemyState.attack;
+            attackable = true;
         }
         else
         {
             myAnim.SetBool("IsAttacking", false);
         }
+        if (!IsInSight())
+        {
+            mustWait = idleTime;
+            myState = EnemyState.idle;
+        }
     }
 
     public void Damaged()
     {
-        idleCoroutine = DamagedCooldown(5f);
-        StartCoroutine(idleCoroutine);
+        mustRun = aggroTime;
     }
 
-    void AddPoint(int number)
+    void ChooseState()
     {
-        //patrolPoints = new Transform[number];
         
-        //for (int i = 0; i < number; i += 1)
-        //{
-        //    Vector3 pos = new Vector3(Random.Range(-150f, 150f), 2.2f, Random.Range(-150f, 150f));
-        //    GameObject curPoint = Instantiate(point);
-        //    curPoint.transform.position = pos;
-        //    patrolPoints[i] = curPoint.transform;
-        //}
     }
 
     public void Debugla()

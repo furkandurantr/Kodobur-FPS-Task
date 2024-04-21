@@ -31,7 +31,7 @@ public class PlayerMovement : MonoBehaviour
         float z = Input.GetAxis("Vertical");
         RaycastHit isJumpBuffer;
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        Physics.SphereCast(groundCheck.position - (Vector3.down * bufferDistance)/2, groundDistance, Vector3.down * bufferDistance, out isJumpBuffer, groundMask);
+        Physics.SphereCast(transform.position, groundDistance, Vector3.down * bufferDistance, out isJumpBuffer, groundMask);
 
         if (Input.GetButton("Jump") && isJumpBuffer.transform != null && velocity.y < 0) 
         {

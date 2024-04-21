@@ -136,10 +136,11 @@ public class Navigation : MonoBehaviour
         Vector3 myDir = transform.forward;
         
         Vector3 dir = (player.transform.position - myPos).normalized;
+        //This raycast can be changed with spherecast/capsulecast
         hits = Physics.RaycastAll(transform.position, dir, LOS);
 
         System.Array.Sort(hits, (a, b) => (a.distance.CompareTo(b.distance)));
-
+        //Fake FOV
         float angle = Vector3.Angle(dir, transform.forward);
 
         angle = MathF.Abs(angle);

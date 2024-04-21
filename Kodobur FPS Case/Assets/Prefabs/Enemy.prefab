@@ -315,6 +315,9 @@ MonoBehaviour:
   damage: 5
   FOV: 60
   LOS: 100
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 64
   myAnim: {fileID: 4678429431194852193}
 --- !u!114 &4421457566865529006
 MonoBehaviour:

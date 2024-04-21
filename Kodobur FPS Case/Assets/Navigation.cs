@@ -8,7 +8,6 @@ using UnityEngine.AI;
 public class Navigation : MonoBehaviour
 {
     public Transform player;
-    public GameObject point;
     public Transform[] patrolPoints;
     public NavMeshAgent agent;
 

@@ -50,9 +50,10 @@ public class AmmoSpawner : MonoBehaviour
         Vector3 curPos = new Vector3(randX, ammoSpawn.transform.position.y, randZ);
         while(Physics.CheckSphere(curPos, spawnCollision, spawnLayer))
         {
+            Debug.Log("Trying to spawn");
             randX = Random.Range(-randomX, randomX);
             randZ = Random.Range(-randomZ, randomZ);
-            curPos = new Vector3(randX, 0, randZ);
+            curPos = new Vector3(randX, ammoSpawn.transform.position.y, randZ);
         }
         GameObject myObj = Instantiate(ammoSpawn);
         var ammoLoot = myObj.GetComponent<AmmoLoot>();

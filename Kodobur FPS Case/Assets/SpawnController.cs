@@ -8,7 +8,7 @@ public class SpawnController : MonoBehaviour
 {
     public int maxEnemy = 5;
     public int maxPatrolNumber = 3;
-    public GameObject enemy;
+    public GameObject[] enemy;
     public Transform player;
     public Transform myCamera;
     public float enemySpawnTime = 10f;
@@ -34,7 +34,7 @@ public class SpawnController : MonoBehaviour
 
     void CheckForSpawns()
     {
-        if (currentEnemyNumber < maxEnemy)
+        if (currentEnemyNumber < maxEnemy + (player.GetComponent<PlayerLevel>().curLevel - 1))
         {
             spawnerTime += Time.deltaTime;
             if (spawnerTime >= enemySpawnTime)
@@ -51,7 +51,8 @@ public class SpawnController : MonoBehaviour
 
     void SpawnEnemy()
     {
-        GameObject curEnemy = Instantiate(enemy);
+        int randEnemy = Random.Range(0, enemy.Length);
+        GameObject curEnemy = Instantiate(enemy[randEnemy]);
         int spawnRandom = Random.Range(0, spawnPoints.Length - 1);
         curEnemy.transform.position = spawnPoints[spawnRandom].position;
 

@@ -52,7 +52,7 @@ public class HealthSpawner : MonoBehaviour
         {
             randX = Random.Range(-randomX, randomX);
             randZ = Random.Range(-randomZ, randomZ);
-            curPos = new Vector3(randX, 0, randZ);
+            curPos = new Vector3(randX, healthSpawn.transform.position.y, randZ);
         }
         GameObject myObj = Instantiate(healthSpawn);
         var healthLoot = myObj.GetComponent<HealthLoot>();

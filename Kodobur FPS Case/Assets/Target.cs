@@ -44,6 +44,8 @@ public class Target : MonoBehaviour
     {
         spawner.GetComponent<SpawnController>().EnemyDead();
         var playerLevel = camPos.GetComponentInParent<PlayerLevel>();
+        var playerGun = camPos.GetComponentInParent<Gun>();
+        playerGun.AmmoOnKill();
         //var playerLevel = camPos.gameObject.GetComponent<PlayerLevel>();
         playerLevel.GainExp(expPoint);
         playerLevel.GainScore(1);

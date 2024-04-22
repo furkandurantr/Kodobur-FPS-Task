@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using TMPro;
+using System;
 
 public class Gun : MonoBehaviour
 {
@@ -12,6 +12,7 @@ public class Gun : MonoBehaviour
     public int piercing = 0;
     public int maxAmmo = 10;
     public int curAmmo;
+    public int ammoOnKill = 0;
     public Camera fpsCam;
     [SerializeField] TextMeshProUGUI ammoText;
     // Start is called before the first frame update
@@ -23,7 +24,7 @@ public class Gun : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Fire1") && curAmmo > 0)
+        if (Input.GetButtonDown("Fire1") && curAmmo > 0 && Time.timeScale != 0)
         {
             Shoot();
         }
@@ -56,5 +57,10 @@ public class Gun : MonoBehaviour
                 break;
             }
         }
+    }
+    public void AmmoOnKill()
+    {
+        curAmmo += (int)MathF.Min(ammoOnKill, maxAmmo - curAmmo);
+        Reload();
     }
 }

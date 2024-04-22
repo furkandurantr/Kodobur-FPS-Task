@@ -144742,9 +144742,9 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 1.0333333
-    functionName: Deubgla()
-    data: 
-    objectReferenceParameter: {fileID: 11500000, guid: 7f7d0c3474c39264c97ca06d424ec5a6, type: 3}
+    functionName: TestFunction()
+    data: Test Text
+    objectReferenceParameter: {fileID: 11500000, guid: a5f49a5b9ff5f8e4ca708bc96622585f, type: 3}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0

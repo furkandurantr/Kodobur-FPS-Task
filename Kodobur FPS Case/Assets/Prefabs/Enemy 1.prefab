@@ -308,11 +308,11 @@ MonoBehaviour:
   player: {fileID: 0}
   patrolPoints: []
   agent: {fileID: 3835047251345760041}
-  idleTime: 1
+  idleTime: 2
   aggroTime: 5
-  attackTime: 0.3
-  attackRange: 5
-  damage: 45
+  attackTime: 0.5
+  attackRange: 7
+  damage: 40
   FOV: 60
   LOS: 100
   layerMask:
@@ -331,12 +331,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d74b51909c276ce4e9b1d7278bfe9cf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 30
+  health: 50
   myObj: {fileID: 4312218379561600912}
   camPos: {fileID: 0}
   slider: {fileID: 4538383624374935422}
   spawner: {fileID: 0}
-  expPoint: 15
+  expPoint: 25
 --- !u!95 &6761229053318829523
 Animator:
   serializedVersion: 5

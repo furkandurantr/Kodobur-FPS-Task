@@ -49,7 +49,6 @@ public class PlayerMovement : MonoBehaviour
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
 
-
         Vector3 move = Vector3.ClampMagnitude(transform.right * x + transform.forward * z, 1f);
 
         //Sprinting to int

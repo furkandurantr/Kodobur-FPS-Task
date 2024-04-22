@@ -8,7 +8,6 @@ public class Navigation : MonoBehaviour
     public Transform player;
     public Transform[] patrolPoints;
     public NavMeshAgent agent;
-
     public float idleTime = 5f;
     public float aggroTime = 5f;
     public float attackTime = 1f;
@@ -17,10 +16,8 @@ public class Navigation : MonoBehaviour
     public float FOV = 60f;
     public float LOS = 100f;
     int curPoint = 0;
-
     float mustRun = 0f;
     float mustWait = 0f;
-
     public enum EnemyState
     {
         idle,
@@ -43,7 +40,6 @@ public class Navigation : MonoBehaviour
     {
         myState = EnemyState.patrol;
         agent = GetComponent<NavMeshAgent>();
-        //myAnim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -178,6 +174,7 @@ public class Navigation : MonoBehaviour
     void AttackAnim()
     {
         float distance = Vector3.Distance(agent.transform.position, player.position);
+        //This attack time can be changed with Animation Events
         if (myAnim.GetCurrentAnimatorStateInfo(0).normalizedTime > 1.0f && !myAnim.IsInTransition(0) && attackable == true)
         {
             attackable = false;

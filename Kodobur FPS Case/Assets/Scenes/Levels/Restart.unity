@@ -470,6 +470,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myLabel: {fileID: 0}
+  levelName: Main Menu
 --- !u!114 &1334517680
 MonoBehaviour:
   m_ObjectHideFlags: 0

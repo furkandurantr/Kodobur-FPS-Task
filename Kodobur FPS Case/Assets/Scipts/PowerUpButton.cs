@@ -84,6 +84,12 @@ public class PowerUpButton : MonoBehaviour
             case "Exp":
             player.GetComponent<PlayerLevel>().bonusExp += effect.value;      
                 break;
+            case "Attack Speed":
+            player.GetComponent<Gun>().attackSpeed += effect.value;      
+                break;
+            case "Lifesteal":
+            player.GetComponent<Gun>().lifeSteal += effect.value;      
+                break;
             default:
                 break;
         }

@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System;
 
 public class MainMenu : MonoBehaviour
 {
     public TextMeshProUGUI myLabel;
+    public String levelName;
     // Start is called before the first frame update
     public void ButtonPressed()
     {
-        SceneManager.LoadScene("Level1");
+        SceneManager.LoadScene(levelName);
     }
     void Start()
     {

@@ -217,7 +217,7 @@ GameObject:
   - component: {fileID: 4421457566865529006}
   - component: {fileID: 6761229053318829523}
   m_Layer: 0
-  m_Name: Enemy 1
+  m_Name: Enemy Horde
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -281,7 +281,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: -1372625422
   m_Radius: 0.5000001
-  m_Speed: 10
+  m_Speed: 4
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 270
@@ -312,7 +312,7 @@ MonoBehaviour:
   aggroTime: 5
   attackTime: 0.5
   attackRange: 7
-  damage: 40
+  damage: 25
   FOV: 60
   LOS: 100
   layerMask:
@@ -331,12 +331,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d74b51909c276ce4e9b1d7278bfe9cf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 40
+  health: 100
   myObj: {fileID: 4312218379561600912}
   camPos: {fileID: 0}
   slider: {fileID: 4538383624374935422}
   spawner: {fileID: 0}
-  expPoint: 25
+  expPoint: 15
 --- !u!95 &6761229053318829523
 Animator:
   serializedVersion: 5
@@ -713,7 +713,7 @@ PrefabInstance:
     - target: {fileID: -751029739195076794, guid: 1b1595a3eddd7394f8dff33a9b282ac0, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 5dd0fe49979023d469635a4d587e5b20, type: 2}
+      objectReference: {fileID: 2100000, guid: f3a90972ab0e846469c3a8a4f12ca7ef, type: 2}
     - target: {fileID: 919132149155446097, guid: 1b1595a3eddd7394f8dff33a9b282ac0, type: 3}
       propertyPath: m_Name
       value: GiantDummy

@@ -11,21 +11,36 @@ public class Gun : MonoBehaviour
     public float range = 100f;
     public int piercing = 0;
     public int maxAmmo = 10;
+    public float attackCooldown = 0.5f;
+    public float attackSpeed = 1;
     public int curAmmo;
+    public float lifeSteal = 0f;
     public int ammoOnKill = 0;
     public Camera fpsCam;
     public GameObject particle;
+    float attackCd = 0;
     [SerializeField] TextMeshProUGUI ammoText;
     // Start is called before the first frame update
     void Start()
     {
         curAmmo = maxAmmo;
+        Reload();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Fire1") && curAmmo > 0 && Time.timeScale != 0)
+
+        if (attackCooldown > 0)
+        {
+            attackCd += Time.deltaTime * attackSpeed;
+            if (Input.GetButton("Fire1") && curAmmo > 0 && Time.timeScale != 0 && attackCd >= attackCooldown)
+            {
+                attackCd = 0;
+                Shoot();
+            }
+        }
+        else if (Input.GetButtonDown("Fire1") && curAmmo > 0 && Time.timeScale != 0)
         {
             Shoot();
         }
@@ -47,12 +62,13 @@ public class Gun : MonoBehaviour
         {
             if (i < piercing + 1)
             {
-                    Target target = hits[i].transform.GetComponent<Target>();
-                    if (target != null)
-                    {
-                        target.TakeDamage(damage);
-                    }
-                    Instantiate(particle, hits[i].point, Quaternion.LookRotation(hits[i].normal));
+                Target target = hits[i].transform.GetComponent<Target>();
+                if (target != null)
+                {
+                    target.TakeDamage(damage);
+                    gameObject.GetComponent<PlayerHP>().Heal(damage/100*lifeSteal);
+                }
+                Instantiate(particle, hits[i].point, Quaternion.LookRotation(hits[i].normal));
             }
             else
             {

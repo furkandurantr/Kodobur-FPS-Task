@@ -20,7 +20,7 @@ public class MouseLook : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Time.timeScale == 1)
+        if(Time.timeScale > 0)
         {
             float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
             float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
@@ -31,15 +31,20 @@ public class MouseLook : MonoBehaviour
 
             transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
             playerBody.Rotate(Vector3.up * mouseX);
+            if(Input.GetButtonDown("Fire2"))    
+            {
+                Camera.main.fieldOfView = 20f;
+            }
+            if(Input.GetButtonUp("Fire2"))
+            {
+                Camera.main.fieldOfView = 60f;
+            }
         }
-        if(Input.GetButtonDown("Fire2"))
-        {
-            Camera.main.fieldOfView = 20f;
-        }
-        if(Input.GetButtonUp("Fire2"))
+        if(Input.GetButton("Menu"))
         {
             Camera.main.fieldOfView = 60f;
         }
+
     }
 
     public void OnValueChange()

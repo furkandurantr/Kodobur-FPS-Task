@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.UI;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class SpawnController : MonoBehaviour
 {
@@ -36,6 +34,15 @@ public class SpawnController : MonoBehaviour
     {
         if (currentEnemyNumber < maxEnemy + (player.GetComponent<PlayerLevel>().curLevel - 1))
         {
+            // A basic spawner time increase, not robust
+            if(player.GetComponent<PlayerLevel>().curLevel > 5)
+            {
+                spawnerTime += Time.deltaTime;
+            }
+            if(player.GetComponent<PlayerLevel>().curLevel > 10)
+            {
+                spawnerTime += Time.deltaTime;
+            }
             spawnerTime += Time.deltaTime;
             if (spawnerTime >= enemySpawnTime)
             {

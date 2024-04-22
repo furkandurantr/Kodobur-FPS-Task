@@ -14,6 +14,7 @@ public class Gun : MonoBehaviour
     public int curAmmo;
     public int ammoOnKill = 0;
     public Camera fpsCam;
+    public GameObject particle;
     [SerializeField] TextMeshProUGUI ammoText;
     // Start is called before the first frame update
     void Start()
@@ -51,6 +52,7 @@ public class Gun : MonoBehaviour
                     {
                         target.TakeDamage(damage);
                     }
+                    Instantiate(particle, hits[i].point, Quaternion.LookRotation(hits[i].normal));
             }
             else
             {

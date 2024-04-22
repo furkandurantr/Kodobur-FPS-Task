@@ -41,7 +41,7 @@ InputManager:
     m_Name: Fire1
     descriptiveName: 
     descriptiveNegativeName: 
-    negativeButton: mouse 1
+    negativeButton: 
     positiveButton: mouse 0
     altNegativeButton: 
     altPositiveButton: mouse 0
